@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a **Tetris Web Game** project in the planning phase. The codebase currently contains comprehensive documentation for developing a browser-based Tetris game using vanilla JavaScript, HTML5 Canvas, and modern web technologies.
+This is a **Tetris Web Game** project. A fully playable browser-based Tetris game using vanilla JavaScript, HTML5 Canvas, and modern web technologies.
 
-**Current Status**: Documentation phase complete. Implementation has not yet started.
+**Current Status**: Core game implementation complete. Game is fully playable and published on GitHub Pages.
 
 ## Documentation Structure
 
@@ -28,14 +28,15 @@ The application follows a **3-layer architecture**:
 2. **Game Logic Layer**: Game engine (Game.js), board management (Board.js), tetromino pieces (Tetromino.js), scoring (Score.js)
 3. **Data Layer**: LocalStorage for high scores, game state, and settings
 
-### Key Classes (Not Yet Implemented)
+### Key Classes (Implemented)
 
-- `Game`: Main game engine, game loop, state management, piece spawning/movement/rotation
-- `Board`: 10x20 grid, collision detection, line clearing
-- `Tetromino`: 7 piece types (I, O, T, S, Z, J, L), rotation with Super Rotation System (SRS)
-- `Renderer`: Canvas drawing with 30px cell size, visual effects
-- `UI`: Score/level/lines display, control buttons, event binding
-- `Storage`: LocalStorage wrapper for persistence
+- `Game`: Main game engine, game loop, state management, piece spawning/movement/rotation ✓
+- `Board`: 10x20 grid, collision detection, line clearing ✓
+- `Tetromino`: 7 piece types (I, O, T, S, Z, J, L), rotation with Super Rotation System (SRS) ✓
+- `Renderer`: Canvas drawing with 30px cell size, visual effects ✓
+- `Score`: Score calculation, level management, line counting ✓
+- `UI`: Integrated in main.js - Score/level/lines display, control buttons, event binding ✓
+- `Storage`: High score persistence via localStorage ✓
 
 ### Core Algorithms (Defined in Technical Spec)
 
@@ -44,35 +45,34 @@ The application follows a **3-layer architecture**:
 - **Line Clearing**: Splice full rows, add empty rows at top
 - **Scoring**: 100×level (1 line) to 800×level (4 lines/Tetris)
 
-## Planned Directory Structure
+## Current Directory Structure
 
 ```
-src/
-├── index.html
+/ (root - GitHub Pages compatible)
+├── index.html         # Main entry point
+├── main.js           # Game integration and UI logic
 ├── styles/
-│   ├── main.css
-│   ├── game.css
-│   └── responsive.css
+│   └── main.css      # Complete game styling
 ├── scripts/
-│   ├── main.js
-│   ├── game/          # Core game logic
-│   ├── ui/            # Rendering and UI
-│   └── utils/         # Storage, helpers
-└── assets/
-    ├── images/
-    └── sounds/
-
-tests/
-├── unit/              # Jest unit tests
-└── integration/
+│   ├── game/         # Core game logic
+│   │   ├── Game.js
+│   │   ├── Board.js
+│   │   ├── Tetromino.js
+│   │   ├── Score.js
+│   │   └── constants.js
+│   └── ui/           # Rendering
+│       └── Renderer.js
+├── docs/             # Project documentation
+├── tests/            # Unit tests
+└── [config files]    # package.json, vite.config.js, etc.
 ```
 
-## Development Workflow (When Implementation Begins)
+## Development Workflow
 
-### Build & Development
-- Build tool: Webpack or Vite (to be selected during setup)
-- Dev server with hot reload
-- ES6+ transpilation via Babel
+### Local Development
+- Run local server: `python3 -m http.server 8000` (from root directory)
+- Access: `http://localhost:8000/`
+- No build step required (vanilla ES6 modules)
 
 ### Testing
 - Framework: Jest
@@ -92,7 +92,7 @@ tests/
 
 ## Key Constants & Configuration
 
-Defined in `src/scripts/game/constants.js` (to be created):
+Defined in `scripts/game/constants.js`:
 
 - Board: 10 columns × 20 rows
 - Cell size: 30px
@@ -100,26 +100,26 @@ Defined in `src/scripts/game/constants.js` (to be created):
 - Level speeds: 1000ms (level 1) → 50ms (level 15)
 - Scoring: Single=100, Double=300, Triple=500, Tetris=800 (all multiplied by level)
 
-## Implementation Priority
+## Implementation Status
 
-**P0 (Must Have)**:
+**P0 (Must Have)** - ✅ COMPLETE:
 - Basic game logic, 7 tetrominos, scoring, game over detection
 
-**P1 (High Priority)**:
+**P1 (High Priority)** - ✅ COMPLETE:
 - Next piece preview, high score persistence, pause, level system
 
-**P2 (Medium Priority)**:
+**P2 (Medium Priority)** - ⏳ TODO:
 - Sound effects, visual effects, game state save/restore
 
-**P3 (Low Priority)**:
+**P3 (Low Priority)** - ⏳ TODO:
 - Touch controls, color-blind mode, additional game modes
 
 ## Development Phases
 
-1. **Phase 1** (1-2 weeks): Requirements & design - COMPLETE
-2. **Phase 2** (3-4 weeks): Core development - NOT STARTED
-3. **Phase 3** (1-2 weeks): Testing & optimization - NOT STARTED
-4. **Phase 4** (1 week): Deployment - NOT STARTED
+1. **Phase 1**: Requirements & design - ✅ COMPLETE
+2. **Phase 2**: Core development - ✅ COMPLETE
+3. **Phase 3**: Testing & optimization - 🚧 IN PROGRESS
+4. **Phase 4**: Deployment - ✅ COMPLETE (GitHub Pages)
 
 ## Important Design Decisions
 
