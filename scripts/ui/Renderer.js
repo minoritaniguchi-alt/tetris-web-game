@@ -17,10 +17,10 @@ export class Renderer {
       this.nextPieceCanvas.height = 4 * CELL_SIZE;
     }
 
-    // Colors
-    this.backgroundColor = '#1a1a2e';
-    this.gridColor = '#16213e';
-    this.borderColor = '#0f3460';
+    // Colors - Bright and happy theme
+    this.backgroundColor = '#FFFACD'; // Light cream yellow
+    this.gridColor = '#FFE4B5'; // Moccasin (soft peachy grid)
+    this.borderColor = '#FFB6C1'; // Light pink border
     this.ghostOpacity = 0.3;
   }
 

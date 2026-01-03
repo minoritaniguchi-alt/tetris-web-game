@@ -42,8 +42,11 @@ const keysPressed = new Set();
 let touchStartX = 0;
 let touchStartY = 0;
 let touchStartTime = 0;
-const SWIPE_THRESHOLD = 30; // Minimum distance for swipe
+let lastTouchX = 0;
+let lastMoveX = 0; // Track last horizontal move position
+const MOVE_THRESHOLD = 40; // Pixels to move for one cell movement
 const TAP_TIME_THRESHOLD = 200; // Maximum time for tap (ms)
+const TAP_DISTANCE_THRESHOLD = 20; // Maximum distance for tap (px)
 
 /**
  * Initialize the game
@@ -101,6 +104,13 @@ function bindEvents() {
   gameCanvas.addEventListener('touchstart', handleTouchStart, { passive: false });
   gameCanvas.addEventListener('touchend', handleTouchEnd, { passive: false });
   gameCanvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+  // Prevent scroll on entire document during gameplay (mobile)
+  document.addEventListener('touchmove', (e) => {
+    if (game && game.isPlaying()) {
+      e.preventDefault();
+    }
+  }, { passive: false });
 }
 
 /**
@@ -204,17 +214,52 @@ function handleTouchStart(e) {
   touchStartX = touch.clientX;
   touchStartY = touch.clientY;
   touchStartTime = Date.now();
+  lastTouchX = touch.clientX;
+  lastMoveX = touch.clientX;
 }
 
 /**
- * Handle touch move
+ * Handle touch move - smooth piece tracking
  */
 function handleTouchMove(e) {
   e.preventDefault();
+
+  if (!game.isPlaying()) {
+    return;
+  }
+
+  const touch = e.touches[0];
+  const currentX = touch.clientX;
+  const currentY = touch.clientY;
+
+  // Handle horizontal movement (left/right)
+  const deltaX = currentX - lastMoveX;
+
+  if (Math.abs(deltaX) >= MOVE_THRESHOLD) {
+    if (deltaX > 0) {
+      // Move right
+      game.moveRight();
+    } else {
+      // Move left
+      game.moveLeft();
+    }
+    lastMoveX = currentX;
+  }
+
+  // Handle vertical movement (down)
+  const deltaY = currentY - touchStartY;
+
+  if (deltaY > MOVE_THRESHOLD) {
+    // Move down
+    game.moveDown();
+    touchStartY = currentY;
+  }
+
+  lastTouchX = currentX;
 }
 
 /**
- * Handle touch end
+ * Handle touch end - detect tap for rotation
  */
 function handleTouchEnd(e) {
   e.preventDefault();
@@ -235,30 +280,9 @@ function handleTouchEnd(e) {
   const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
   // Check if it's a tap (short time and small distance)
-  if (distance < SWIPE_THRESHOLD && deltaTime < TAP_TIME_THRESHOLD) {
+  if (distance < TAP_DISTANCE_THRESHOLD && deltaTime < TAP_TIME_THRESHOLD) {
     // Tap detected - rotate piece
     game.rotatePiece();
-    return;
-  }
-
-  // It's a swipe - determine direction
-  if (distance >= SWIPE_THRESHOLD) {
-    const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
-
-    // Determine swipe direction based on angle
-    if (angle >= -45 && angle < 45) {
-      // Right swipe
-      game.moveRight();
-    } else if (angle >= 45 && angle < 135) {
-      // Down swipe
-      game.softDrop();
-    } else if (angle >= -135 && angle < -45) {
-      // Up swipe (can be used for hard drop or rotation)
-      game.hardDrop();
-    } else {
-      // Left swipe
-      game.moveLeft();
-    }
   }
 }
 

@@ -277,35 +277,75 @@ footer {
 /* Responsive Design */
 @media (max-width: 768px) {
   header h1 {
-    font-size: 2.5rem;
+    font-size: 2rem;
+    margin-bottom: 0;
+  }
+
+  header p {
+    font-size: 0.8rem;
+  }
+
+  header {
+    margin-bottom: 15px;
   }
 
   .top-controls {
-    padding: 10px;
-    gap: 10px;
+    padding: 8px;
+    gap: 8px;
+    margin-bottom: 10px;
   }
 
   .top-controls .btn {
-    font-size: 0.9rem;
-    padding: 10px 15px;
+    font-size: 0.85rem;
+    padding: 8px 12px;
   }
 
   .game-container {
     flex-direction: column;
-    padding: 20px;
-    gap: 20px;
+    padding: 15px;
+    gap: 15px;
   }
 
   .game-info {
     width: 100%;
+    gap: 10px;
+  }
+
+  /* Compact info sections for mobile */
+  .info-section {
+    padding: 8px 12px;
+  }
+
+  .info-section h2 {
+    font-size: 0.7rem;
+    margin-bottom: 4px;
   }
 
   .score-value {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
   }
 
   .info-value {
-    font-size: 1.3rem;
+    font-size: 1rem;
+  }
+
+  /* Compact next piece preview */
+  .next-piece-container {
+    padding: 5px;
+  }
+
+  /* Compact touch hint */
+  .touch-hint {
+    padding: 10px;
+  }
+
+  .touch-hint h3 {
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+  }
+
+  .touch-hint p {
+    font-size: 0.75rem;
   }
 
   /* Hide keyboard controls guide on mobile */
