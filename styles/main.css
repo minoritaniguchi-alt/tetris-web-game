@@ -106,6 +106,40 @@ main {
   min-width: 200px;
 }
 
+/* Stats Bar - Horizontal layout */
+#stats-bar {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+/* Info Panel - Small square boxes */
+.info-panel {
+  flex: 1;
+  min-width: 80px;
+  background: linear-gradient(135deg, #FFF0F5 0%, #F0F8FF 100%);
+  border-radius: 8px;
+  padding: 10px;
+  border: 2px solid rgba(255, 182, 193, 0.5);
+  text-align: center;
+}
+
+.info-panel h2 {
+  font-size: 0.7rem;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 5px;
+  color: #888;
+}
+
+.stat-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #FF6B9D;
+}
+
+/* Info Section - For next piece preview */
 .info-section {
   background: linear-gradient(135deg, #FFF0F5 0%, #F0F8FF 100%);
   border-radius: 10px;
@@ -306,32 +340,56 @@ footer {
     gap: 15px;
   }
 
+  /* Shrink game board to 75% width on mobile */
+  #gameCanvas {
+    width: 75%;
+    height: auto;
+  }
+
   .game-info {
     width: 100%;
-    gap: 10px;
+    gap: 12px;
+  }
+
+  /* Stats bar - compact horizontal layout */
+  #stats-bar {
+    display: flex;
+    gap: 6px;
+    justify-content: space-between;
+  }
+
+  /* Info panel - small square boxes */
+  .info-panel {
+    flex: 1;
+    min-width: 60px;
+    padding: 6px 4px;
+    border-radius: 6px;
+    border: 2px solid rgba(255, 182, 193, 0.6);
+  }
+
+  .info-panel h2 {
+    font-size: 0.6rem;
+    margin-bottom: 3px;
+    letter-spacing: 0.02em;
+  }
+
+  .stat-value {
+    font-size: 0.9rem;
   }
 
   /* Compact info sections for mobile */
   .info-section {
-    padding: 8px 12px;
+    padding: 10px;
   }
 
   .info-section h2 {
-    font-size: 0.7rem;
-    margin-bottom: 4px;
-  }
-
-  .score-value {
-    font-size: 1.2rem;
-  }
-
-  .info-value {
-    font-size: 1rem;
+    font-size: 0.75rem;
+    margin-bottom: 6px;
   }
 
   /* Compact next piece preview */
   .next-piece-container {
-    padding: 5px;
+    padding: 8px;
   }
 
   /* Compact touch hint */
