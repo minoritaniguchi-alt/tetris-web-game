@@ -10,21 +10,78 @@
   <body>
     <div id="app">
       <header>
-        <h1>Tetris</h1>
+        <h1>TETRIS</h1>
         <p>Classic Tetris Game</p>
       </header>
+
       <main>
         <div class="game-container">
-          <div class="info">
-            <p>プロジェクトセットアップ完了！</p>
-            <p>Phase 2でゲームロジックを実装します。</p>
+          <!-- Left Panel: Game Board -->
+          <div class="game-board-container">
+            <canvas id="gameCanvas"></canvas>
+          </div>
+
+          <!-- Right Panel: Info & Controls -->
+          <div class="game-info">
+            <!-- Score Display -->
+            <div class="info-section">
+              <h2>スコア</h2>
+              <div id="score" class="score-value">0</div>
+            </div>
+
+            <!-- Level Display -->
+            <div class="info-section">
+              <h2>レベル</h2>
+              <div id="level" class="info-value">1</div>
+            </div>
+
+            <!-- Lines Display -->
+            <div class="info-section">
+              <h2>ライン</h2>
+              <div id="lines" class="info-value">0</div>
+            </div>
+
+            <!-- High Score Display -->
+            <div class="info-section">
+              <h2>ハイスコア</h2>
+              <div id="highScore" class="info-value">0</div>
+            </div>
+
+            <!-- Next Piece Preview -->
+            <div class="info-section">
+              <h2>ネクスト</h2>
+              <div class="next-piece-container">
+                <canvas id="nextPieceCanvas"></canvas>
+              </div>
+            </div>
+
+            <!-- Control Buttons -->
+            <div class="controls">
+              <button id="startBtn" class="btn btn-primary">スタート</button>
+              <button id="pauseBtn" class="btn btn-secondary" disabled>ポーズ</button>
+              <button id="resetBtn" class="btn btn-secondary">リセット</button>
+            </div>
+
+            <!-- Key Controls Guide -->
+            <div class="controls-guide">
+              <h3>操作方法</h3>
+              <ul>
+                <li><kbd>←</kbd> <kbd>→</kbd> 移動</li>
+                <li><kbd>↓</kbd> ソフトドロップ</li>
+                <li><kbd>↑</kbd> 回転</li>
+                <li><kbd>Space</kbd> ハードドロップ</li>
+                <li><kbd>P</kbd> / <kbd>Esc</kbd> ポーズ</li>
+              </ul>
+            </div>
           </div>
         </div>
       </main>
+
       <footer>
         <p>&copy; 2025 Tetris Web Game</p>
       </footer>
     </div>
+
     <script type="module" src="./main.js"></script>
   </body>
 </html>
