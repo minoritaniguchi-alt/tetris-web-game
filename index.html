@@ -9,6 +9,13 @@
   </head>
   <body>
     <div id="app">
+      <!-- Top Control Buttons -->
+      <div class="top-controls">
+        <button id="startBtn" class="btn btn-primary">スタート</button>
+        <button id="pauseBtn" class="btn btn-secondary" disabled>ポーズ</button>
+        <button id="resetBtn" class="btn btn-secondary">リセット</button>
+      </div>
+
       <header>
         <h1>TETRIS</h1>
         <p>Classic Tetris Game</p>
@@ -55,16 +62,18 @@
               </div>
             </div>
 
-            <!-- Control Buttons -->
-            <div class="controls">
-              <button id="startBtn" class="btn btn-primary">スタート</button>
-              <button id="pauseBtn" class="btn btn-secondary" disabled>ポーズ</button>
-              <button id="resetBtn" class="btn btn-secondary">リセット</button>
+            <!-- Touch Controls Hint (Mobile Only) -->
+            <div class="touch-hint">
+              <h3>📱 タッチ操作</h3>
+              <p>
+                スワイプ: 左右・下移動<br>
+                タップ: 回転
+              </p>
             </div>
 
-            <!-- Key Controls Guide -->
+            <!-- Key Controls Guide (Desktop Only) -->
             <div class="controls-guide">
-              <h3>操作方法</h3>
+              <h3>⌨️ キーボード操作</h3>
               <ul>
                 <li><kbd>←</kbd> <kbd>→</kbd> 移動</li>
                 <li><kbd>↓</kbd> ソフトドロップ</li>

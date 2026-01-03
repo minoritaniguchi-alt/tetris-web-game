@@ -38,6 +38,13 @@ const KEY_BINDINGS = {
 // Prevent key repeat
 const keysPressed = new Set();
 
+// Touch controls
+let touchStartX = 0;
+let touchStartY = 0;
+let touchStartTime = 0;
+const SWIPE_THRESHOLD = 30; // Minimum distance for swipe
+const TAP_TIME_THRESHOLD = 200; // Maximum time for tap (ms)
+
 /**
  * Initialize the game
  */
@@ -89,6 +96,11 @@ function bindEvents() {
       e.preventDefault();
     }
   });
+
+  // Touch events (for mobile)
+  gameCanvas.addEventListener('touchstart', handleTouchStart, { passive: false });
+  gameCanvas.addEventListener('touchend', handleTouchEnd, { passive: false });
+  gameCanvas.addEventListener('touchmove', handleTouchMove, { passive: false });
 }
 
 /**
@@ -176,6 +188,78 @@ function handleKeyDown(e) {
  */
 function handleKeyUp(e) {
   keysPressed.delete(e.code);
+}
+
+/**
+ * Handle touch start
+ */
+function handleTouchStart(e) {
+  e.preventDefault();
+
+  if (!game.isPlaying()) {
+    return;
+  }
+
+  const touch = e.touches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+  touchStartTime = Date.now();
+}
+
+/**
+ * Handle touch move
+ */
+function handleTouchMove(e) {
+  e.preventDefault();
+}
+
+/**
+ * Handle touch end
+ */
+function handleTouchEnd(e) {
+  e.preventDefault();
+
+  if (!game.isPlaying()) {
+    return;
+  }
+
+  const touch = e.changedTouches[0];
+  const touchEndX = touch.clientX;
+  const touchEndY = touch.clientY;
+  const touchEndTime = Date.now();
+
+  const deltaX = touchEndX - touchStartX;
+  const deltaY = touchEndY - touchStartY;
+  const deltaTime = touchEndTime - touchStartTime;
+
+  const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+  // Check if it's a tap (short time and small distance)
+  if (distance < SWIPE_THRESHOLD && deltaTime < TAP_TIME_THRESHOLD) {
+    // Tap detected - rotate piece
+    game.rotatePiece();
+    return;
+  }
+
+  // It's a swipe - determine direction
+  if (distance >= SWIPE_THRESHOLD) {
+    const angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
+
+    // Determine swipe direction based on angle
+    if (angle >= -45 && angle < 45) {
+      // Right swipe
+      game.moveRight();
+    } else if (angle >= 45 && angle < 135) {
+      // Down swipe
+      game.softDrop();
+    } else if (angle >= -135 && angle < -45) {
+      // Up swipe (can be used for hard drop or rotation)
+      game.hardDrop();
+    } else {
+      // Left swipe
+      game.moveLeft();
+    }
+  }
 }
 
 /**
