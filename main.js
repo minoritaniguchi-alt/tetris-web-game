@@ -10,6 +10,7 @@ let scoreElement;
 let levelElement;
 let linesElement;
 let highScoreElement;
+let timeRemainingElement;
 let startBtn;
 let pauseBtn;
 let resetBtn;
@@ -59,6 +60,7 @@ function init() {
   levelElement = document.getElementById('level');
   linesElement = document.getElementById('lines');
   highScoreElement = document.getElementById('highScore');
+  timeRemainingElement = document.getElementById('timeRemaining');
   startBtn = document.getElementById('startBtn');
   pauseBtn = document.getElementById('pauseBtn');
   resetBtn = document.getElementById('resetBtn');
@@ -230,7 +232,6 @@ function handleTouchMove(e) {
 
   const touch = e.touches[0];
   const currentX = touch.clientX;
-  const currentY = touch.clientY;
 
   // Handle horizontal movement (left/right)
   const deltaX = currentX - lastMoveX;
@@ -246,20 +247,11 @@ function handleTouchMove(e) {
     lastMoveX = currentX;
   }
 
-  // Handle vertical movement (down)
-  const deltaY = currentY - touchStartY;
-
-  if (deltaY > MOVE_THRESHOLD) {
-    // Move down
-    game.moveDown();
-    touchStartY = currentY;
-  }
-
   lastTouchX = currentX;
 }
 
 /**
- * Handle touch end - detect tap for rotation
+ * Handle touch end - detect tap for rotation or swipe for hard drop
  */
 function handleTouchEnd(e) {
   e.preventDefault();
@@ -278,6 +270,16 @@ function handleTouchEnd(e) {
   const deltaTime = touchEndTime - touchStartTime;
 
   const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+  // Check if it's a downward swipe (fast downward movement)
+  const SWIPE_DOWN_THRESHOLD = 60; // Minimum vertical distance for swipe down
+  const SWIPE_TIME_THRESHOLD = 300; // Maximum time for swipe (ms)
+
+  if (deltaY > SWIPE_DOWN_THRESHOLD && deltaTime < SWIPE_TIME_THRESHOLD && Math.abs(deltaX) < deltaY) {
+    // Downward swipe detected - hard drop
+    game.hardDrop();
+    return;
+  }
 
   // Check if it's a tap (short time and small distance)
   if (distance < TAP_DISTANCE_THRESHOLD && deltaTime < TAP_TIME_THRESHOLD) {
@@ -329,6 +331,10 @@ function updateUI() {
   scoreElement.textContent = stats.score.toLocaleString();
   levelElement.textContent = stats.level;
   linesElement.textContent = stats.lines;
+
+  // Update time remaining (time attack mode)
+  const timeRemaining = game.getTimeRemaining();
+  timeRemainingElement.textContent = timeRemaining.toFixed(2);
 }
 
 /**

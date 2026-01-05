@@ -32,15 +32,21 @@
           <div class="game-info">
             <!-- Stats Bar: Horizontal Stats Display -->
             <div id="stats-bar">
+              <!-- Time Remaining Display (Time Attack Mode) -->
+              <div class="info-panel time-panel">
+                <h2>残り時間</h2>
+                <div id="timeRemaining" class="stat-value">60.00</div>
+              </div>
+
               <!-- Score Display -->
               <div class="info-panel">
                 <h2>スコア</h2>
                 <div id="score" class="stat-value">0</div>
               </div>
 
-              <!-- Level Display -->
+              <!-- Speed Display -->
               <div class="info-panel">
-                <h2>レベル</h2>
+                <h2>スピード</h2>
                 <div id="level" class="stat-value">1</div>
               </div>
 
@@ -69,7 +75,8 @@
             <div class="touch-hint">
               <h3>📱 タッチ操作</h3>
               <p>
-                スワイプ: 左右・下移動<br>
+                スワイプ: 左右移動<br>
+                下スワイプ: ハードドロップ<br>
                 タップ: 回転
               </p>
             </div>

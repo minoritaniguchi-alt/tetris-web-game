@@ -215,19 +215,21 @@ export class Renderer {
 
   /**
    * Draw game over overlay
+   * @param {string} reason - Game over reason ('timeout' or 'blocks')
    */
-  drawGameOver() {
+  drawGameOver(reason = 'blocks') {
     // Semi-transparent overlay
     this.ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-    // Game Over text
+    // Game Over text - different message based on reason
+    const message = reason === 'timeout' ? 'TIME UP' : 'GAME OVER';
     this.ctx.fillStyle = '#ff0000';
     this.ctx.font = 'bold 48px Arial';
     this.ctx.textAlign = 'center';
     this.ctx.textBaseline = 'middle';
     this.ctx.fillText(
-      'GAME OVER',
+      message,
       this.canvas.width / 2,
       this.canvas.height / 2
     );
@@ -260,7 +262,8 @@ export class Renderer {
     }
 
     if (game.isGameOver()) {
-      this.drawGameOver();
+      const reason = game.getGameOverReason();
+      this.drawGameOver(reason);
     }
 
     // Draw next piece

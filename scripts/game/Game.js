@@ -15,6 +15,11 @@ export class Game {
     this.dropInterval = 0;
     this.lastTime = 0;
     this.animationFrameId = null;
+    // Time attack mode: 60 seconds
+    this.timeRemaining = 60000; // 60 seconds in milliseconds
+    this.gameStartTime = 0;
+    this.elapsedTime = 0;
+    this.gameOverReason = null; // 'timeout' or 'blocks'
   }
 
   /**
@@ -29,6 +34,11 @@ export class Game {
     this.dropTimer = 0;
     this.dropInterval = this.score.getDropSpeed();
     this.lastTime = 0;
+    // Reset time attack timer
+    this.timeRemaining = 60000; // 60 seconds
+    this.gameStartTime = 0;
+    this.elapsedTime = 0;
+    this.gameOverReason = null;
   }
 
   /**
@@ -45,6 +55,7 @@ export class Game {
     this.state = GAME_STATE.PLAYING;
     this.dropInterval = this.score.getDropSpeed();
     this.lastTime = performance.now();
+    this.gameStartTime = performance.now();
     this.gameLoop();
   }
 
@@ -113,6 +124,34 @@ export class Game {
       return;
     }
 
+    // Update elapsed time
+    this.elapsedTime += deltaTime;
+
+    // Update time remaining (60 second countdown)
+    this.timeRemaining = Math.max(0, 60000 - this.elapsedTime);
+
+    // Check if time is up
+    if (this.timeRemaining <= 0) {
+      this.gameOver('timeout');
+      return;
+    }
+
+    // Time-based speed up (based on elapsed time)
+    // 0-15s: Speed 1 (fixed)
+    // 15s+: Speed increases by 1 every 3 seconds
+    // 15s~: Speed 2, 18s~: Speed 3, 21s~: Speed 4, 24s~: Speed 5, 27s~: Speed 6, ...
+    let newLevel = 1;
+    if (this.elapsedTime >= 15000) {
+      // After 15 seconds, increase speed by 1 every 3 seconds
+      // At 15s: 1 + floor((15000-12000)/3000) = 1 + 1 = 2
+      newLevel = 1 + Math.floor((this.elapsedTime - 12000) / 3000);
+    }
+
+    if (newLevel !== this.score.level) {
+      this.score.level = newLevel;
+      this.dropInterval = this.score.getDropSpeed();
+    }
+
     this.dropTimer += deltaTime;
 
     if (this.dropTimer >= this.dropInterval) {
@@ -134,7 +173,7 @@ export class Game {
 
     // Check if piece can be placed (game over if not)
     if (!this.board.isValidMove(this.currentPiece, 0, 0)) {
-      this.gameOver();
+      this.gameOver('blocks');
     }
   }
 
@@ -334,8 +373,10 @@ export class Game {
 
   /**
    * Check and handle game over
+   * @param {string} reason - Reason for game over ('timeout' or 'blocks')
    */
-  gameOver() {
+  gameOver(reason = 'blocks') {
+    this.gameOverReason = reason;
     this.state = GAME_STATE.GAME_OVER;
     if (this.animationFrameId) {
       cancelAnimationFrame(this.animationFrameId);
@@ -405,6 +446,22 @@ export class Game {
    */
   getScoreStats() {
     return this.score.getStats();
+  }
+
+  /**
+   * Get time remaining in seconds (for time attack mode)
+   * @returns {number} - Time remaining in seconds (with decimals)
+   */
+  getTimeRemaining() {
+    return this.timeRemaining / 1000;
+  }
+
+  /**
+   * Get game over reason
+   * @returns {string|null} - Game over reason ('timeout' or 'blocks')
+   */
+  getGameOverReason() {
+    return this.gameOverReason;
   }
 
   /**
