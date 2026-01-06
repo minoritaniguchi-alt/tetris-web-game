@@ -137,14 +137,16 @@ export class Game {
     }
 
     // Time-based speed up (based on elapsed time)
-    // 0-15s: Speed 1 (fixed)
-    // 15s+: Speed increases by 1 every 3 seconds
-    // 15s~: Speed 2, 18s~: Speed 3, 21s~: Speed 4, 24s~: Speed 5, 27s~: Speed 6, ...
+    // 0-30s: Speed 1 (fixed)
+    // 30s+: Speed increases by 1 every 3 seconds
+    // 30s~33s: Speed 2, 33s~36s: Speed 3, 36s~39s: Speed 4, 39s~42s: Speed 5, ...
     let newLevel = 1;
-    if (this.elapsedTime >= 15000) {
-      // After 15 seconds, increase speed by 1 every 3 seconds
-      // At 15s: 1 + floor((15000-12000)/3000) = 1 + 1 = 2
-      newLevel = 1 + Math.floor((this.elapsedTime - 12000) / 3000);
+    if (this.elapsedTime >= 30000) {
+      // After 30 seconds, increase speed by 1 every 3 seconds
+      // At 30s: 2 + floor((30000-30000)/3000) = 2 + 0 = 2
+      // At 33s: 2 + floor((33000-30000)/3000) = 2 + 1 = 3
+      // At 36s: 2 + floor((36000-30000)/3000) = 2 + 2 = 4
+      newLevel = 2 + Math.floor((this.elapsedTime - 30000) / 3000);
     }
 
     if (newLevel !== this.score.level) {
